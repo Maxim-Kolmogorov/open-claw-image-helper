@@ -1,0 +1,28 @@
+{
+  "name": "helper-image",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/*.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && esbuild src/generateImage.useCase.ts src/editImage.useCase.ts --bundle --platform=node --format=esm --external:sharp --outdir=workspace/skills/image-helper --banner:js=\"import{createRequire as __cr}from'module';const require=__cr(import.meta.url);\"",
+    "start-generate-image": "node workspace/skills/image-helper/generateImage.useCase.js",
+    "start-edit-image": "node workspace/skills/image-helper/editImage.useCase.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.5.0",
+    "esbuild": "^0.28.1",
+    "eslint": "^10.5.0",
+    "globals": "^17.6.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.61.1"
+  },
+  "dependencies": {
+    "joi": "^18.2.3",
+    "openai": "^6.44.0",
+    "sharp": "^0.34.2"
+  }
+}
