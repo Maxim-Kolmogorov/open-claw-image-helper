@@ -16,22 +16,7 @@ OpenClaw skill for generating and editing images via the OpenAI `gpt-image-2` mo
 
 Put image-helper in /workspace/skills. Example full path on a VPS/server: ~/.openclaw/workspace/skills/image-helper.
 
-Add OPENAI_API_KEY in ~/.openclaw/openclaw.json.
-
-```json
-{
-  "skills": {
-    "entries": {
-      "image-helper": {
-        "enabled": true,
-        "env": {
-          "OPENAI_API_KEY": "key"
-        }
-      }
-    }
-  }
-}
-```
+Add OPENAI_API_KEY in ~/.openclaw/.env
 
 Tell the agent that a new skill has appeared, let him finish the setup on his own.
 
@@ -48,3 +33,19 @@ Generated files are saved to `storage/` inside the skill directory.
 ## U.P.D:
 
 In SKILL.md you can change path ~/.openclaw on your own path, if you run into problems.
+
+If there are problems with OpenClaw killing long-running processes, add this to the config.:
+
+```json
+{
+  tools: {
+    exec: {
+      backgroundMs: 10000,
+      timeoutSec: 7200,
+      cleanupMs: 7200000,
+      notifyOnExit: false,
+      notifyOnExitEmptySuccess: true
+    }
+  }
+}
+```

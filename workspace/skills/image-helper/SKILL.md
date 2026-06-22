@@ -5,7 +5,7 @@ description: Use it when you are asked to generate/edit images based on user pro
 
 # Image Generation
 
-Use this skill when you need generate/edit images based on user prompts or other input data. You can specify the style, content, and other parameters to customize the generated images.
+Use this skill when you need generate images based on user prompts or other input data. You can specify the style, content, and other parameters to customize the generated images.
 
 ## Steps
 
@@ -40,6 +40,39 @@ not exist — run `npm install` once in the skill directory
 - Success → a JSON object is printed to **stdout** and the process exits with code `0`.
 - Failure → an error message is printed to **stderr** and the process exits with a
   non-zero code. Use the exit code to decide success/failure.
+
+## ⚠️ Important: running scripts with API key
+
+The scripts read `process.env.OPENAI_API_KEY`. The key is stored in `~/.openclaw/.env`.
+
+**Correct way** — use `child_process.execFileSync` with explicit `env`.
+Do NOT use `&&` in bash — env vars are lost between processes.
+
+```javascript
+const fs = require('fs');
+const envFile = fs.readFileSync(process.env.HOME + '/.openclaw/.env', 'utf8');
+const match = envFile.match(/^OPENAI_API_KEY=(.*)$/);
+const key = match[1].trim();
+
+const env = { ...process.env, OPENAI_API_KEY: key };
+
+require('child_process').execFileSync('node', [
+  process.env.HOME + '/.openclaw/workspace/skills/image-helper/editImage.useCase.js',
+  '/path/to/photo.jpg',
+  'edit prompt',
+  '',
+  '1024x1024',
+  'high',
+  'png'
+], { stdio: 'inherit', env });
+```
+
+**Alternative** — through `exec` tool with `host: 'gateway'`, big timeout:
+
+    exec("cd /path/to/skill && node editImage.useCase.js ...", {
+      host: 'gateway',
+      timeout: 300
+    })
 
 ### `generateImage.useCase.js`
 
@@ -128,4 +161,4 @@ node editImage.useCase.js "/path/to/me.png" "Replace the background with a beach
 > without a transparent background, ask them to repaint it following this rule
 > rather than troubleshooting the script.
 
-**Note:** The same shell quoting rules as above apply to the prompt.
+**Note:** The same shell quoting rules as above apply to the prompt.openclaw@nat
