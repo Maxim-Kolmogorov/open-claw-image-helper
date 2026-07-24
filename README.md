@@ -43,8 +43,7 @@ If there are problems with OpenClaw killing long-running processes, add this to 
       backgroundMs: 10000,
       timeoutSec: 7200,
       cleanupMs: 7200000,
-      notifyOnExit: false,
-      notifyOnExitEmptySuccess: true
+      notifyOnExit: false
     }
   }
 }
